@@ -19,7 +19,7 @@ public class PriorityQueue
 
     /// <summary>
     /// Remove and return the value with the highest priority.
-    /// In case of tie, the one that appeared last is removed (LIFO for same priority).
+    /// In case of tie, the one that appeared first is removed (FIFO for same priority).
     /// </summary>
     /// <returns>The value with the highest priority</returns>
     public string Dequeue()
@@ -29,19 +29,20 @@ public class PriorityQueue
             throw new InvalidOperationException("The queue is empty.");
         }
 
-        // Find the index of the item with the highest priority
-        var highPriorityIndex = 0;
-        for (int index = 1; index < _queue.Count; index++) // FIXED: loop should go to Count, not Count - 1
+        int highestPriority = _queue[0].Priority;
+        int highPriorityIndex = 0;
+
+        for (int i = 1; i < _queue.Count; i++)
         {
-            if (_queue[index].Priority >= _queue[highPriorityIndex].Priority)
+            if (_queue[i].Priority > highestPriority)
             {
-                highPriorityIndex = index;
+                highestPriority = _queue[i].Priority;
+                highPriorityIndex = i;
             }
         }
 
-        // Remove and return the item with the highest priority
         var item = _queue[highPriorityIndex];
-        _queue.RemoveAt(highPriorityIndex); // FIXED: properly remove the item
+        _queue.RemoveAt(highPriorityIndex);
         return item.Value;
     }
 
